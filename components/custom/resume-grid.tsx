@@ -40,7 +40,7 @@ export function ResumeGrid({
       <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
         <ResumeCard type="create" onClick={onCreateNew} />
 
-        {resumes.map((resume) => (
+        {resumes && resumes.map((resume) => (
           <ResumeCard
             key={resume.id}
             type="resume"

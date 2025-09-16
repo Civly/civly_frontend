@@ -56,7 +56,6 @@ export function AppSidebar({
       },
     ],
   }
-  console.log(cvs)
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

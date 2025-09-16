@@ -21,7 +21,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
-import { createClient } from '@/utils/supabase/client'
+import { createEmptyCv, deleteCv, shareCV } from '@/services/cv_data.service'
 
 export function NavMain({
   items,
@@ -85,10 +85,7 @@ export function NavMain({
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setSelectedCvId(null) // Clear any selected CV
-    const supabase = await createClient()
-    await supabase.functions.invoke('restful-api/cv', {
-      body: { cv: { name: 'Resume' } },
-    })
+    await createEmptyCv()
     router.refresh()
   }
 
@@ -115,8 +112,8 @@ export function NavMain({
     }
 
     // Fallback to ID or date
-    const dateStr = cv.createdAt
-      ? new Date(cv.createdAt).toLocaleDateString()
+    const dateStr = cv.created_at
+      ? new Date(cv.created_at).toLocaleDateString()
       : ''
     return `CV - ${dateStr || cv.id?.toString().slice(0, 8)}`
   }
@@ -247,20 +244,29 @@ export function NavMain({
                                     router.push(`/editor`)
                                   }}
                                   onShare={() => {
-                                    // TODO: Implement share functionality
                                     console.log('Share CV:', cv.id)
+                                    if(cv.id){
+                                      shareCV(cv.id)
+                                    }
                                   }}
                                   onDuplicate={() => {
                                     // TODO: Implement duplicate functionality
                                     console.log('Duplicate CV:', cv.id)
+                                    if(cv.id){
+                                      //duplicateCv(cv.id)
+                                      router.refresh()
+                                    }
                                   }}
                                   onExportPdf={() => {
                                     // TODO: Implement PDF export functionality
                                     console.log('Export PDF:', cv.id)
                                   }}
                                   onDelete={() => {
-                                    // TODO: Implement delete functionality
                                     console.log('Delete CV:', cv.id)
+                                    if(cv.id){
+                                      deleteCv(cv.id).then(() => 
+                                      router.refresh())
+                                    }
                                   }}
                                 />
                               </div>

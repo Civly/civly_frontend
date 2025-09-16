@@ -9,8 +9,8 @@ export const cvDataSchema = z.object({
   id: z.uuid().optional(),
   name: z.string().min(1),
   userId: z.string().optional(),
-  createdAt: z.string().optional(),
-  updatedAt: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
   visibility: z.enum(["draft", "private", "public"]).optional(),
   password: z.string().optional(),
   // Subschemas

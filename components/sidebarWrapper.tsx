@@ -16,7 +16,7 @@ export async function SidebarWrapper() {
     }
 
     const { data, error } = await supabase.functions.invoke('restful-api/cv', {method: 'GET'})
-    console.log("cvs:",data);
+    
     if (error) {
       return <AppSidebar cvs={[]} />
     }
