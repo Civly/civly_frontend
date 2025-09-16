@@ -11,7 +11,7 @@ interface Resume {
 }
 
 interface ResumeGridProps {
-  resumes?: Resume[]
+  resumes?: Resume[] | false
   onCreateNew?: () => void
   onEditResume?: (id: string) => void
   onShareResume?: (id: string) => void
