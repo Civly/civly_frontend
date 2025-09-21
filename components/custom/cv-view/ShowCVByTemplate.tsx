@@ -4,7 +4,7 @@ import { CvData } from '@/schemas/cv_data_schema'
 
 export function ShowCVByTemplate({ cvData }: { cvData: CvData }) {
   console.log('cvData: ', cvData)
-  const newCvData = {
+  let newCvData = {
     ...cvData,
     layoutConfigs: {
       templateId: 0,
@@ -13,14 +13,23 @@ export function ShowCVByTemplate({ cvData }: { cvData: CvData }) {
       fontSizeId: 0,
     },
   }
+  if(cvData.layoutConfigs){
+    newCvData = cvData;
+  }
   switch (newCvData.layoutConfigs?.templateId) {
-    case 0:
+    case 0: // Modern
       return (
         <>
           <CVCleanTemplate cvData={cvData} accentColor="text-blue-600" />
         </>
       )
-    case 1:
+    case 1: // Classic
+      return (
+        <>
+          {/* TODO: insert Classic template here */}
+        </>
+      )
+    case 2: // ATS
       return (
         <>
           <CVATSTemplate cvData={cvData} />
