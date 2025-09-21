@@ -190,3 +190,58 @@
 [data-radix-popper-content-wrapper] {
   z-index: 99999 !important;
 }
+
+.classic-blue {
+  color: #005eff;
+}
+.sky-blue {
+  color: #44aaff;
+}
+.cyan-blue {
+  color: #44ddff;
+}
+.royal-purple {
+  color: #6644ff;
+}
+.deep-purple {
+  color: #8844ff;
+}
+.lavender {
+  color: #aa88ff;
+}
+.forest-green {
+  color: #22aa44;
+}
+.emerald {
+  color: #44cc66;
+}
+.mint-green {
+  color: #66dd88;
+}
+.crimson {
+  color: #cc2244;
+}
+.coral {
+  color: #ff4466;
+}
+.rose {
+  color: #ff6688;
+}
+.burnt-orange {
+  color: #dd6622;
+}
+.tangerine {
+  color: #ff8844;
+}
+.peach {
+  color: #ffaa66;
+}
+.charcoal {
+  color: #444444;
+}
+.slate-gray {
+  color: #666666;
+}
+.stone-gray {
+  color: #888888;
+}

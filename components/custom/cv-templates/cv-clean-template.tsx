@@ -19,6 +19,7 @@ import {
   IconBrandLinkedin,
   IconBrandXing,
 } from '@tabler/icons-react'
+import { ColorRecord } from '@/types/colorType'
 
 // --- Types ---
 
@@ -54,12 +55,12 @@ function Page({ children }: { children: ReactNode }) {
 
 // --- Main Template Component with Pagination Logic ---
 export function CVCleanTemplate({
-  cvData,
-  accentColor = 'text-blue-600',
+  cvData
 }: CVCleanTemplateProps) {
+  const color = ColorRecord[cvData.layoutConfigs.colorId]
+  const [accentColor, setAccentColor] = useState(color.class)
   const [paginatedPages, setPaginatedPages] = useState<ReactNode[]>([])
   const [isCalculating, setIsCalculating] = useState(true)
-
   // State to hold the final, balanced layout
   const [balancedLayout, setBalancedLayout] = useState<{
     left: ReactNode[]
@@ -73,6 +74,7 @@ export function CVCleanTemplate({
 
   // STEP 1: Balance the columns based on initial measurements.
   useEffect(() => {
+    setAccentColor(color.class)
     // This effect runs once to decide if Education should be moved.
     const timer = setTimeout(() => {
       const headerEl = headerRef.current

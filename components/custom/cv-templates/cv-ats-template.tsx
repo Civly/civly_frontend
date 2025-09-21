@@ -11,6 +11,7 @@ import {
   IconBrandXing,
 } from '@tabler/icons-react'
 import { CvData } from '@/schemas/cv_data_schema'
+import { ColorRecord } from '@/types/colorType'
 
 // --- Layout Constants ---
 const A4_PAGE_HEIGHT_PX = 1123 // Fixed height of an A4 page at 96 DPI
@@ -37,6 +38,8 @@ function Page({ children }: { children: ReactNode }) {
 
 // --- Main Template Component with Pagination Logic ---
 export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
+  const color = ColorRecord[cvData.layoutConfigs.colorId]
+  const [accentColor, setAccentColor] = useState(color.class)
   // State to hold the final, paginated content. Each inner array is a page.
   const [paginatedPages, setPaginatedPages] = useState<ReactNode[][]>([[]])
   // Ref for the hidden container used to measure the raw content.
@@ -46,6 +49,7 @@ export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
 
   // This effect performs the measurement and distribution logic whenever the CV data changes.
   useEffect(() => {
+    setAccentColor(color.class)
     setIsCalculating(true)
 
     const measureAndPaginate = () => {
@@ -57,7 +61,7 @@ export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
       let currentPageContent: ReactNode[] = []
       let currentPageHeight = 0
 
-      const originalJsxNodes = CVContent({ cvData })
+      const originalJsxNodes = CVContent({ cvData, accentColor })
 
       contentBlocks.forEach((block, index) => {
         // Correct measurement including vertical margins for accurate layout calculation.
@@ -112,7 +116,7 @@ export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
 
     const timer = setTimeout(measureAndPaginate, 50)
     return () => clearTimeout(timer)
-  }, [cvData])
+  }, [cvData, accentColor])
 
   return (
     <div>
@@ -121,7 +125,7 @@ export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
         ref={measurementContainerRef}
         className="absolute opacity-0 -z-10 w-[702px]"
       >
-        {CVContent({ cvData })}
+        {CVContent({ cvData, accentColor })}
       </div>
 
       {/* 2. Visible Renderer for Calculated Pages */}
@@ -143,13 +147,13 @@ export default function CVATSTemplate({ cvData }: { cvData: CvData }) {
 // --- CV Content Component ---
 // CRUCIAL REFACTOR: This function now builds and returns a FLAT ARRAY of JSX elements.
 // Every logical block (headers, titles, paragraphs, list items) is a separate element in the array.
-function CVContent({ cvData }: { cvData: CvData }): ReactNode[] {
+function CVContent({ cvData, accentColor }: { cvData: CvData, accentColor: string }): ReactNode[] {
   const blocks: ReactNode[] = []
 
   // Block 1: Header (Name & Title)
   blocks.push(
     <div key="header" className="pb-1 mb-4">
-      <h1 className="text-4xl font-bold text-blue-600 mb-2 tracking-wide">
+      <h1 className={`text-4xl font-bold ${accentColor} mb-2 tracking-wide`}>
         {cvData.personalInformation?.name?.toUpperCase()}{' '}
         {cvData.personalInformation?.surname?.toUpperCase()}
       </h1>
@@ -220,7 +224,7 @@ function CVContent({ cvData }: { cvData: CvData }): ReactNode[] {
     blocks.push(
       <h3
         key="exp-title"
-        className="text-sm font-bold text-blue-600 tracking-wide border-b border-blue-200 pb-1 mb-4"
+        className={`text-sm font-bold ${accentColor} tracking-wide border-b border-blue-200 pb-1 mb-4`}
       >
         EXPERIENCE
       </h3>,
@@ -277,7 +281,7 @@ function CVContent({ cvData }: { cvData: CvData }): ReactNode[] {
     blocks.push(
       <h3
         key="edu-title"
-        className="text-base font-bold text-blue-600 tracking-wide border-b border-blue-200 pb-1 mb-4"
+        className={`text-base font-bold ${accentColor} tracking-wide border-b border-blue-200 pb-1 mb-4`}
       >
         EDUCATION
       </h3>,
@@ -317,7 +321,7 @@ function CVContent({ cvData }: { cvData: CvData }): ReactNode[] {
     blocks.push(
       <h3
         key="skills-title"
-        className="text-base font-bold text-blue-600 tracking-wide border-b border-blue-200 pb-1 mb-4"
+        className={`text-base font-bold ${accentColor} tracking-wide border-b border-blue-200 pb-1 mb-4`}
       >
         SKILLS
       </h3>,
@@ -325,7 +329,7 @@ function CVContent({ cvData }: { cvData: CvData }): ReactNode[] {
     cvData.skillGroups.forEach((skillGroup) => {
       blocks.push(
         <div key={skillGroup.name} className="mb-3">
-          <h4 className="text-sm font-bold text-blue-600 mb-1 tracking-wide">
+          <h4 className={`text-sm font-bold ${accentColor} mb-1 tracking-wide`}>
             {(skillGroup.name ?? '').toUpperCase()}
           </h4>
           <div className="text-sm text-gray-700">
