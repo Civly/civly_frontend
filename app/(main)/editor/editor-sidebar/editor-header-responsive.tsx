@@ -139,7 +139,7 @@ export function EditorHeaderResponsive({ cvId = "dummy" }: { cvId?: string }) {
 
   const handleVisibilityChange = async (
     newVisibility: Visibility,
-    newPassword?: string
+    newPassword?: string | null
   ) => {
     if (!currentCv) return;
     const v =
@@ -150,7 +150,7 @@ export function EditorHeaderResponsive({ cvId = "dummy" }: { cvId?: string }) {
           : "draft";
     try {
       setSaveStatus("Saving...");
-      await updateVisibility(currentCv, v, newPassword);
+      await updateVisibility(currentCv, v, newPassword ?? undefined);
       setCurrentCv({
         ...currentCv,
         visibility: v,

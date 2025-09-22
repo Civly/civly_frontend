@@ -25,7 +25,7 @@ interface VisibilityModalProps {
   password: string | null
   onVisibilityChange: (
     visibility: 'Public' | 'Private' | 'Draft',
-    password?: string,
+    password?: string | null,
   ) => void
 }
 
@@ -38,13 +38,13 @@ export function VisibilityModal({
   onVisibilityChange,
 }: VisibilityModalProps) {
   const { toast } = useToast()
-  const [passwordInput, setPasswordInput] = useState(password)
+  const [passwordInput, setPasswordInput] = useState<string>('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [localVisibility, setLocalVisibility] = useState(visibility)
 
   // Sync local state if the external props change
   useEffect(() => {
-    setPasswordInput(password)
+    setPasswordInput(password ?? '')
     setLocalVisibility(visibility)
   }, [password, visibility])
 
@@ -152,7 +152,7 @@ export function VisibilityModal({
                 <Input
                   id="password-input"
                   type={isPasswordVisible ? 'text' : 'password'}
-                  value={passwordInput ?? undefined}
+                  value={passwordInput ?? ''}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Enter a strong password"
                 />
