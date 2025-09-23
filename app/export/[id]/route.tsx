@@ -20,7 +20,7 @@ async function generatePDF(url: string) {
     const isVercel = !!process.env.VERCEL_ENV;
     let puppeteer: typeof import("puppeteer") | typeof import("puppeteer-core"),
       launchOptions: {
-        headless: boolean;
+        headless: boolean | string;
         args?: string[];
         executablePath?: string;
       };
@@ -30,7 +30,7 @@ async function generatePDF(url: string) {
       const chromium = (await import("@sparticuz/chromium")).default;
       puppeteer = await import("puppeteer-core");
       launchOptions = {
-        headless: false,
+        headless: 'shell',
         args: chromium.args,
         executablePath: await chromium.executablePath(),
       };
