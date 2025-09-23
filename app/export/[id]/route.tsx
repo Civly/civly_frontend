@@ -30,7 +30,7 @@ async function generatePDF(url: string) {
       const chromium = (await import("@sparticuz/chromium")).default;
       puppeteer = await import("puppeteer-core");
       launchOptions = {
-        headless: false,
+        headless: 'shell',
         args: chromium.args,
         executablePath: await chromium.executablePath(),
       };
