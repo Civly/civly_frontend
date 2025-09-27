@@ -1,57 +1,45 @@
 import { CvData } from "@/schemas/cv_data_schema";
-import { createClient } from "@/utils/supabase/client";
-import { FunctionRegion } from "@supabase/supabase-js";
 
-const sb = createClient();
-
-const path = "cv-data/";
-const region = FunctionRegion.EuWest2;
+const path = "/cvData";
 
 export async function fetchAll(): Promise<CvData[]> {
-  const { data, error } = await sb.functions.invoke(path, {
-    method: "GET",
-    region,
+  const data = await fetch(path, {
+    method: "GET"
   });
-  if (error) throw error;
-  return data.data;
+  return await data.json();
 }
 
-// Single-item CRUD (server owns timestamps)
 export async function fetchCv(id: string): Promise<CvData> {
-  const { data, error } = await sb.functions.invoke(path + id, {
-    method: "GET",
-    region,
+  const data = await fetch(path + '/' + id, {
+    method: "GET"
   });
-  if (error) throw error;
-  return data;
+  return await data.json();
 }
 
 export async function createEmptyCv(): Promise<{ id: string }> {
-  const { data, error } = await sb.functions.invoke(path, {
+  const data = await fetch(path, {
     method: "POST",
-    body: {},
-    region,
+    body: null
   });
-  if (error) throw error;
-  return data as { id: string };
+  return await data.json() as { id: string };
 }
 
 export async function duplicateCv(id: string | null): Promise<string> {
   if (id === null) return "";
-  const { data, error } = await sb.functions.invoke(path + id, {
-    method: "POST",
-    body: {},
-    region,
+  const data = await fetch(path + '/' + id, {
+    method: "POST"
   });
-  if (error) throw error;
-  return data.id as string;
+  const response = await data.json()
+  return response.id as string;
 }
 
 export async function updateCVName(id: string, value: string) {
-  const { data, error } = await sb.functions.invoke(path + id, {
+  await fetch(path + '/' + id, {
     method: "PATCH",
-    body: { name: value },
-    region,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: value }),
   });
 }
 
@@ -64,31 +52,30 @@ export async function updateVisibility(
   if(newPassword){
     payload = { visibility: value, name: cv.name, password: newPassword } as CvData
   }
-  const { data, error } = await sb.functions.invoke(path + cv.id, {
+  const data = await fetch(path + '/' + cv.id, {
     method: "PATCH",
-    body: payload,
-    region,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
-
-  if (error) throw error;
-  return data;
+  return await data.json();
 }
 
 export async function updateCv(item: CvData): Promise<void> {
-  const { error } = await sb.functions.invoke(path + item.id, {
+  await fetch(path + '/' + item.id, {
     method: "PUT",
-    body: item,
-    region,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
   });
-  if (error) throw error;
 }
 
 export async function deleteCv(id: string): Promise<void> {
-  const { error } = await sb.functions.invoke(path + id, {
-    method: "DELETE",
-    region,
+  await fetch(path + '/' + id, {
+    method: "DELETE"
   });
-  if (error) throw error;
 }
 
 export function handleExportPdf(cv: CvData) {
